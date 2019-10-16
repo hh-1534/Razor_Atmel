@@ -135,7 +135,16 @@ State Machine Function Definitions
 /*-------------------------------------------------------------------------------------------------------------------*/
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
-{//test
+{if( IsButtonPressed(BUTTON0) )
+{
+  /* The button is currently pressed, so make sure the LED is on */
+  LedOn(WHITE);
+}
+else
+{
+  /* The button is not pressed, so make sure the LED is off */
+  LedOff(WHITE);
+}
 
 } /* end UserApp1SM_Idle() */
     
