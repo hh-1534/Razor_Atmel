@@ -86,8 +86,16 @@ Promises:
   - 
 */
 void UserApp1Initialize(void)
-{
+{    LCDCommand(LCD_CLEAR_CMD); 
  
+/***********************************************************************
+Global variable definitions with scope limited to this local application.
+Variable names shall start with "UserApp_" and be declared as static.
+***********************************************************************/
+
+
+ 
+//LCDClearChars(LINE1_START_ADDR + 14, 5);
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -117,7 +125,7 @@ Promises:
   - Calls the function to pointed by the state machine function pointer
 */
 void UserApp1RunActiveState(void)
-{
+{ 
   UserApp1_StateMachine();
 
 } /* end UserApp1RunActiveState */
@@ -136,8 +144,23 @@ State Machine Function Definitions
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-
-} /* end UserApp1SM_Idle() */
+      if( IsButtonPressed(BUTTON0) )
+ {
+  /* The button is currently pressed, so make sure the LED is on */
+    LCDMessage(LINE1_START_ADDR,"GROUP 1!");
+    
+}
+ if(IsButtonPressed(BUTTON1) )
+{
+  /* The button is not pressed, so make sure the LED is off */
+ LCDMessage(LINE1_START_ADDR,"GROUP 2!");
+}
+if(IsButtonPressed(BUTTON2) )
+{
+ LCDMessage(LINE1_START_ADDR,"GROUP 3!");
+}
+      }
+/* end UserApp1SM_Idle() */
     
 
 /*-------------------------------------------------------------------------------------------------------------------*/
