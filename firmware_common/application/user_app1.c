@@ -36,6 +36,8 @@ Runs current task state.  Should only be called once in main loop.
 
 #include "configuration.h"
 
+
+
 /***********************************************************************************************************************
 Global variable definitions with scope across entire project.
 All Global variable names shall start with "G_UserApp1"
@@ -87,6 +89,13 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
+  
+  
+  LCDCommand(LCD_CLEAR_CMD);
+  LCDMessage(LINE1_START_ADDR, "    THREE BUZZER");
+  
+  //PWMAudioSetFrequency(BUZZER1, 100);
+ PWMAudioSetFrequency(BUZZER2, 500);
  
   /* If good initialization, set state to Idle */
   if( 1 )
@@ -135,9 +144,170 @@ State Machine Function Definitions
 /*-------------------------------------------------------------------------------------------------------------------*/
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
-{
+{  
+  
+   static u8  au8Message[] = "GROUP 1!";
+   static u32 timer=300;
+   static u32 u8Counter=0;
+   static u8 au8Message1[] = "GROUP 2!";
+   static u8 au8Message2[] = "GROUP 3!";
+   static u8 u8GameState=0;
+   static u8 u8Gameok=0;
+    //PWMAudioSetFrequency(BUZZER1, 600);
+    
+    
 
-} /* end UserApp1SM_Idle() */
+    /* if(IsButtonPressed(BUTTON3))
+  {
+    PWMAudioOn(BUZZER1);
+   }
+  else
+  {
+    PWMAudioOff(BUZZER1);
+     } **/
+     
+     
+     
+ //PWMAudioSetFrequency(BUZZER2, 100);
+    
+ 
+    
+    if(WasButtonPressed(BUTTON3)){
+      
+      ButtonAcknowledge(BUTTON3);
+      if(u8GameState==0){
+        
+         
+        
+         u8GameState=1; 
+         LCDCommand(LCD_CLEAR_CMD);
+         LCDMessage(LINE1_START_ADDR, "GAME BEGINNING");
+        
+      }
+      if(u8GameState==3){
+        
+        ButtonAcknowledge(BUTTON0);
+        ButtonAcknowledge(BUTTON1);
+        ButtonAcknowledge(BUTTON2);
+        u8GameState=1;
+      
+        LedOff(WHITE);
+        LedOff(PURPLE);
+        LedOff(BLUE);
+        LedOff(CYAN);
+        LedOff(GREEN);
+        LedOff(YELLOW);
+        LedOff(ORANGE);
+        LedOff(RED);
+        PWMAudioOff(BUZZER2);
+        timer=300;
+        u8Counter=0;
+        LCDCommand(LCD_CLEAR_CMD);
+        LCDMessage(LINE1_START_ADDR, "GAME BEGINNING");
+       
+      
+      }
+      
+    }
+ 
+  
+ if(u8GameState==1)
+ {   
+     LedOn(LCD_RED);
+     LedOff(LCD_GREEN);
+     
+     if(WasButtonPressed(BUTTON0))
+     {      
+       ButtonAcknowledge(BUTTON0);
+       LedOff(LCD_RED);
+       LedOff(LCD_GREEN);
+       LedOn(LCD_BLUE);
+        LCDCommand(LCD_CLEAR_CMD);
+       LCDMessage(LINE1_START_ADDR, au8Message);
+       //LCDClearChars(LINE1_START_ADDR + 9, 18);
+    //PWMAudioOn(BUZZER2);
+    
+      u8Gameok=1;
+      u8GameState=2;
+     }
+
+  
+      
+     
+    if(WasButtonPressed(BUTTON1))
+    { 
+        ButtonAcknowledge(BUTTON1);
+        LedOff(LCD_RED);
+        LedOn(LCD_GREEN);
+        LedOn(LCD_BLUE);
+         LCDCommand(LCD_CLEAR_CMD);
+        LCDMessage(LINE1_START_ADDR, au8Message1);
+       // LCDClearChars(LINE1_START_ADDR + 9, 18);
+        u8Gameok=1;
+        u8GameState=2;
+         
+    }
+          
+  
+     
+    
+    if(WasButtonPressed(BUTTON2))
+    { 
+        ButtonAcknowledge(BUTTON2);
+        LedOn(LCD_RED);
+        LedOn(LCD_GREEN);
+        LedOff(LCD_BLUE);
+         LCDCommand(LCD_CLEAR_CMD);
+        LCDMessage(LINE1_START_ADDR, au8Message2);
+        //LCDClearChars(LINE1_START_ADDR + 9, 18);
+        u8Gameok=1; 
+        u8GameState=2;
+    }
+  
+  
+ }
+  if(u8Gameok==1){  
+ 
+  timer--;
+  if(timer==0)
+  {timer=300; u8Counter++;
+  if(u8Counter>=2505)u8Counter=0;}
+  
+  
+  if(u8Counter==0) 
+  {LedOn(WHITE);PWMAudioOn(BUZZER2);}
+  if(u8Counter==1) 
+  {LedOn(PURPLE);PWMAudioOn(BUZZER2); }
+  if(u8Counter==2) 
+  {LedOn(BLUE);PWMAudioOn(BUZZER2);}
+  if(u8Counter==3) 
+   {LedOn(CYAN);PWMAudioOn(BUZZER2);}
+   if(u8Counter==4) 
+   {LedOn(GREEN);PWMAudioOn(BUZZER2);}
+  if(u8Counter==5) 
+   {LedOn(YELLOW);PWMAudioOn(BUZZER2);}
+   if(u8Counter==6) 
+   {LedOn(ORANGE);PWMAudioOn(BUZZER2);}
+  if(u8Counter==7) 
+   {LedOn(RED);PWMAudioOn(BUZZER2); }
+  if(u8Counter==8) 
+   {LedOff(WHITE);
+  LedOff(PURPLE);
+  LedOff(BLUE);
+  LedOff(CYAN);
+  LedOff(GREEN);
+  LedOff(YELLOW);
+  LedOff(ORANGE);
+  LedOff(RED);
+  PWMAudioOff(BUZZER2);
+  u8Gameok=0;
+  u8GameState=3;
+   }
+  }  
+    
+  
+ }
+ /* end UserApp1SM_Idle() */
     
 
 /*-------------------------------------------------------------------------------------------------------------------*/
@@ -145,10 +315,11 @@ static void UserApp1SM_Idle(void)
 static void UserApp1SM_Error(void)          
 {
   
-} /* end UserApp1SM_Error() */
+  } /* end UserApp1SM_Error() */
 
 
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* End of File                                                                                                        */
 /*--------------------------------------------------------------------------------------------------------------------*/
+
