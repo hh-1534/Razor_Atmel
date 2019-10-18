@@ -35,6 +35,9 @@ Runs current task state.  Should only be called once in main loop.
 **********************************************************************************************************************/
 
 #include "configuration.h"
+u32 timer=300;
+u32 u8Counter=0;
+
 
 /***********************************************************************************************************************
 Global variable definitions with scope across entire project.
@@ -86,16 +89,11 @@ Promises:
   - 
 */
 void UserApp1Initialize(void)
-{    LCDCommand(LCD_CLEAR_CMD); 
+{LCDCommand(LCD_CLEAR_CMD);
+  
+  //PWMAudioSetFrequency(BUZZER1, 100);
+ PWMAudioSetFrequency(BUZZER2, 500);
  
-/***********************************************************************
-Global variable definitions with scope limited to this local application.
-Variable names shall start with "UserApp_" and be declared as static.
-***********************************************************************/
-
-
- 
-//LCDClearChars(LINE1_START_ADDR + 14, 5);
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -125,7 +123,7 @@ Promises:
   - Calls the function to pointed by the state machine function pointer
 */
 void UserApp1RunActiveState(void)
-{ 
+{
   UserApp1_StateMachine();
 
 } /* end UserApp1RunActiveState */
@@ -143,24 +141,162 @@ State Machine Function Definitions
 /*-------------------------------------------------------------------------------------------------------------------*/
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
-{
-      if( IsButtonPressed(BUTTON0) )
- {
-  /* The button is currently pressed, so make sure the LED is on */
-    LCDMessage(LINE1_START_ADDR,"GROUP 1!");
+{  
+    //PWMAudioSetFrequency(BUZZER1, 600);
     
-}
- if(IsButtonPressed(BUTTON1) )
-{
-  /* The button is not pressed, so make sure the LED is off */
- LCDMessage(LINE1_START_ADDR,"GROUP 2!");
-}
-if(IsButtonPressed(BUTTON2) )
-{
- LCDMessage(LINE1_START_ADDR,"GROUP 3!");
-}
-      }
-/* end UserApp1SM_Idle() */
+    
+
+    /* if(IsButtonPressed(BUTTON3))
+  {
+    PWMAudioOn(BUZZER1);
+   }
+  else
+  {
+    PWMAudioOff(BUZZER1);
+     } **/
+     
+     
+     
+ //PWMAudioSetFrequency(BUZZER2, 100);
+    
+ 
+
+ if(WasButtonPressed(BUTTON3))
+ {   LedOn(LCD_RED);
+     LedOff(LCD_GREEN);
+     if(WasButtonPressed(BUTTON0))
+  {       LedOff(LCD_RED);
+          LedOff(LCD_GREEN);
+          LedOn(LCD_BLUE);
+    //PWMAudioOn(BUZZER2);
+    
+  timer--;
+  if(timer==0)
+  {timer=300; u8Counter++;
+  if(u8Counter>=2505)u8Counter=0;}
+  u8 au8Message[] = "GROUP 1!";
+  LCDMessage(LINE1_START_ADDR, au8Message);
+   LCDClearChars(LINE1_START_ADDR + 9, 18);
+  
+   if(u8Counter==0) 
+  {LedOn(WHITE);PWMAudioOn(BUZZER2);}
+  if(u8Counter==1) 
+  {LedOn(PURPLE);PWMAudioOn(BUZZER2); }
+  if(u8Counter==2) 
+  {LedOn(BLUE);PWMAudioOn(BUZZER2);}
+  if(u8Counter==3) 
+   {LedOn(CYAN);PWMAudioOn(BUZZER2);}
+   if(u8Counter==4) 
+   {LedOn(GREEN);PWMAudioOn(BUZZER2);}
+  if(u8Counter==5) 
+   {LedOn(YELLOW);PWMAudioOn(BUZZER2);}
+   if(u8Counter==6) 
+   {LedOn(ORANGE);PWMAudioOn(BUZZER2);}
+  if(u8Counter==7) 
+   {LedOn(RED);PWMAudioOn(BUZZER2); }
+  if(u8Counter==8) 
+   {LedOff(WHITE);
+  LedOff(PURPLE);
+  LedOff(BLUE);
+  LedOff(CYAN);
+  LedOff(GREEN);
+  LedOff(YELLOW);
+  LedOff(ORANGE);
+  LedOff(RED);
+  PWMAudioOff(BUZZER2);
+    /*if(u8Counter==9) 
+    LCDCommand(LCD_CLEAR_CMD);*/
+ //PWMAudioOn(BUZZER2);
+    }
+  }
+
+  
+      
+     
+   if(WasButtonPressed(BUTTON1))
+{ LedOff(LCD_RED);
+  LedOn(LCD_GREEN);
+  LedOn(LCD_BLUE);
+    timer--;
+  if(timer==0)
+  {timer=300; u8Counter++;
+  if(u8Counter>=2505)u8Counter=0;}
+  u8 au8Message[] = "GROUP 2!";
+  LCDMessage(LINE1_START_ADDR, au8Message);
+   LCDClearChars(LINE1_START_ADDR + 9, 18);
+  if(u8Counter==0) 
+  {LedOn(WHITE);PWMAudioOn(BUZZER2);}
+  if(u8Counter==1) 
+  {LedOn(PURPLE);PWMAudioOn(BUZZER2); }
+  if(u8Counter==2) 
+  {LedOn(BLUE);PWMAudioOn(BUZZER2);}
+  if(u8Counter==3) 
+   {LedOn(CYAN);PWMAudioOn(BUZZER2);}
+   if(u8Counter==4) 
+   {LedOn(GREEN);PWMAudioOn(BUZZER2);}
+  if(u8Counter==5) 
+   {LedOn(YELLOW);PWMAudioOn(BUZZER2);}
+   if(u8Counter==6) 
+   {LedOn(ORANGE);PWMAudioOn(BUZZER2);}
+  if(u8Counter==7) 
+   {LedOn(RED);PWMAudioOn(BUZZER2); }
+  if(u8Counter==8) 
+   {LedOff(WHITE);
+  LedOff(PURPLE);
+  LedOff(BLUE);
+  LedOff(CYAN);
+  LedOff(GREEN);
+  LedOff(YELLOW);
+  LedOff(ORANGE);
+  LedOff(RED); 
+ PWMAudioOff(BUZZER2); 
+   }
+  }
+    
+  
+     
+    
+  if(WasButtonPressed(BUTTON2))
+  {       LedOn(LCD_RED);
+          LedOn(LCD_GREEN);
+          LedOff(LCD_BLUE);
+    timer--;
+  if(timer==0)
+  {timer=300; u8Counter++;
+  if(u8Counter>=2505)u8Counter=0;}
+  u8 au8Message[] = "GROUP 3!";
+  LCDMessage(LINE1_START_ADDR, au8Message);
+   LCDClearChars(LINE1_START_ADDR + 9, 18);
+  if(u8Counter==0) 
+  {LedOn(WHITE);PWMAudioOn(BUZZER2);}
+  if(u8Counter==1) 
+  {LedOn(PURPLE);PWMAudioOn(BUZZER2); }
+  if(u8Counter==2) 
+  {LedOn(BLUE);PWMAudioOn(BUZZER2);}
+  if(u8Counter==3) 
+   {LedOn(CYAN);PWMAudioOn(BUZZER2);}
+   if(u8Counter==4) 
+   {LedOn(GREEN);PWMAudioOn(BUZZER2);}
+  if(u8Counter==5) 
+   {LedOn(YELLOW);PWMAudioOn(BUZZER2);}
+   if(u8Counter==6) 
+   {LedOn(ORANGE);PWMAudioOn(BUZZER2);}
+  if(u8Counter==7) 
+   {LedOn(RED);PWMAudioOn(BUZZER2); }
+  if(u8Counter==8) 
+   {LedOff(WHITE);
+  LedOff(PURPLE);
+  LedOff(BLUE);
+  LedOff(CYAN);
+  LedOff(GREEN);
+  LedOff(YELLOW);
+  LedOff(ORANGE);
+  LedOff(RED);
+  PWMAudioOff(BUZZER2); }
+    }  
+  }
+ }
+ /* end UserApp1SM_Idle() */
     
 
 /*-------------------------------------------------------------------------------------------------------------------*/
@@ -168,10 +304,11 @@ if(IsButtonPressed(BUTTON2) )
 static void UserApp1SM_Error(void)          
 {
   
-} /* end UserApp1SM_Error() */
+  } /* end UserApp1SM_Error() */
 
 
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* End of File                                                                                                        */
 /*--------------------------------------------------------------------------------------------------------------------*/
+
